@@ -21,5 +21,8 @@
   "homepage": "https://github.com/Telekaster/goit-node-hw-01-cli-app#readme",
   "devDependencies": {
     "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
   }
 }
