@@ -5,6 +5,7 @@ const { v4 } = require("uuid");
 
 // Перезапись файла-----------------------------
 async function updateContacts(path, contacts) {
+  console.log("updateContacts", contacts);
   await fs.writeFile(path, JSON.stringify(contacts));
 }
 // ---------------------------------------------
@@ -32,14 +33,13 @@ async function getContactById(contactId) {
 async function removeContact(contactId) {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === contactId);
-
-  if (index === 1) {
+  console.log(index);
+  if (index === -1) {
     return null;
   }
 
-  await updateContacts(contactsPath, contacts);
-
   const removedContact = contacts.splice(index, 1);
+  await updateContacts(contactsPath, contacts);
   return removedContact;
 }
 
@@ -52,11 +52,14 @@ async function addContact(name, email, phone) {
     email: email,
     phone: phone,
   };
+  if (newContact.email && newContact.phone) {
+    contacts.push(newContact);
+    updateContacts(contactsPath, contacts);
 
-  contacts.push(newContact);
-  updateContacts(contactsPath, contacts);
-
-  return newContact;
+    return newContact;
+  } else {
+    console.log("missing required fileds 'email' or 'phone'");
+  }
 }
 
 module.exports = {
